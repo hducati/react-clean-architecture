@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Styles from './login-styles.scss'
 import { Footer, Input, LoginHeader, FormStatus } from '@/presentation/components';
-import Context from '@/presentation/contexts/form/form-context';
+import Context from '@/presentation/contexts/form/form-context'
 
 type StateProps = {
   isLoading: boolean,
