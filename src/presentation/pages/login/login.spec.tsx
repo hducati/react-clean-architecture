@@ -61,7 +61,7 @@ const simulateStatusForField = (
 ): void => {
   const emailStatus = sut.getByTestId(`${fieldName}-status`)
   expect(emailStatus.title).toBe(validationError || 'Tudo certo!')
-  expect(emailStatus.textContent).toBe('🔴' || '🔵')
+  expect(emailStatus.textContent).toBe(validationError ? '🔴' : '🔵')
 }
 
 describe('Login component', () => {
@@ -100,20 +100,14 @@ describe('Login component', () => {
     const { sut } = makeSut()
     populatePasswordField(sut)
 
-    const passwordStatus = sut.getByTestId('password-status')
-
-    expect(passwordStatus.title).toBe('Tudo certo!')
-    expect(passwordStatus.textContent).toBe('🔵')
+    simulateStatusForField(sut, 'password')
   })
 
   test('should show valid email state if Validation success', () => {
     const { sut } = makeSut()
     populateEmailField(sut)
-  
-    const emailStatus = sut.getByTestId('email-status')
 
-    expect(emailStatus.title).toBe('Tudo certo!')
-    expect(emailStatus.textContent).toBe('🔵')
+    simulateStatusForField(sut, 'email')
   })
 
   test('should enabled submit button if form is valid', () => {
