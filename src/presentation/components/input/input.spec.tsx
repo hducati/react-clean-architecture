@@ -6,10 +6,10 @@ import Context from '@/presentation/contexts/form/form-context'
 
 const makeSut = (fieldName: string): RenderResult => {
   return render(
-    <Context.Provider value={{state: {}}}>
+    <Context.Provider value={{ state: {} }}>
       <Input name={fieldName} />
     </Context.Provider>
- )
+  )
 }
 
 describe('Input Component', () => {

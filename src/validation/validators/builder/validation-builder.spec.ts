@@ -1,6 +1,6 @@
-import { EmailValidation, MinLengthValidation, RequiredFieldValidation } from "@/validation/validators"
-import { ValidationBuilder } from "@/validation/validators/builder/validation-builder"
-import faker from "faker"
+import { EmailValidation, MinLengthValidation, RequiredFieldValidation } from '@/validation/validators'
+import { ValidationBuilder } from '@/validation/validators/builder/validation-builder'
+import faker from 'faker'
 
 describe('ValidationBuilder', () => {
   test('should return RequiredFieldValidation', () => {

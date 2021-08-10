@@ -5,8 +5,8 @@ import { makeLoginValidation } from '@/main/factories/pages/login/login-validati
 
 export const makeLogin: React.FC = () => {
   return (
-    <Login 
-      authentication={makeRemoteAuthentication()} 
+    <Login
+      authentication={makeRemoteAuthentication()}
       validation={makeLoginValidation()}
     />
   )

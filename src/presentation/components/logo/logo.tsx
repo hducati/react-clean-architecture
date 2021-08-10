@@ -1,6 +1,4 @@
-import React from 'react';
-
-type Props = React.HTMLAttributes<HTMLElement>
+import React from 'react'
 
 const Logo: React.FC = () => {
   return (
@@ -8,4 +6,4 @@ const Logo: React.FC = () => {
   )
 }
 
-export default Logo;
+export default Logo

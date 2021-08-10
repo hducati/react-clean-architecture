@@ -1,6 +1,6 @@
-import { ValidationComposite } from "@/validation/validators"
-import { ValidationBuilder } from "@/validation/validators/builder/validation-builder"
-import { makeLoginValidation } from "./login-validation-factory"
+import { ValidationComposite } from '@/validation/validators'
+import { ValidationBuilder } from '@/validation/validators/builder/validation-builder'
+import { makeLoginValidation } from './login-validation-factory'
 
 describe('LoginValidationFactory', () => {
   test('should make ValidationComposite with correct validations', () => {

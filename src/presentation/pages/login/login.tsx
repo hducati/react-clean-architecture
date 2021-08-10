@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Styles from './login-styles.scss'
-import { Footer, Input, LoginHeader, FormStatus } from '@/presentation/components';
+import { Footer, Input, LoginHeader, FormStatus } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
-import { Validation } from '@/presentation/protocols/validation';
-import { Authentication } from '@/domain/usecases';
-import { Link, useHistory } from 'react-router-dom';
+import { Validation } from '@/presentation/protocols/validation'
+import { Authentication } from '@/domain/usecases'
+import { Link, useHistory } from 'react-router-dom'
 
 type Props = {
   validation: Validation
@@ -25,7 +25,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   useEffect(() => {
     setState({
       ...state,
-      emailError: validation.validate('email', state.email ),
+      emailError: validation.validate('email', state.email),
       passwordError: validation.validate('password', state.password)
     })
   }, [state.email, state.password])
@@ -37,18 +37,18 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
       if (state.isLoading || state.emailError || state.passwordError) {
         return
       }
-      setState({ ...state, isLoading: true})
+      setState({ ...state, isLoading: true })
       const account = await authentication.auth({
         email: state.email,
         password: state.password
       })
-  
+
       localStorage.setItem('accessToken', account.accessToken)
 
       history.replace('/')
-    } catch(error) {
+    } catch (error) {
       setState({
-        ...state, 
+        ...state,
         isLoading: false,
         mainError: error.message
       })

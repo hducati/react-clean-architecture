@@ -1,6 +1,6 @@
-import { ValidationComposite } from "@/validation/validators/validation-composite/validation-composite"
-import { FieldValidationSpy } from "@/validation/test";
-import faker from "faker"
+import { ValidationComposite } from '@/validation/validators/validation-composite/validation-composite'
+import { FieldValidationSpy } from '@/validation/test'
+import faker from 'faker'
 
 type SutTypes = {
   sut: ValidationComposite
@@ -24,7 +24,7 @@ const makeSut = (fieldName: string): SutTypes => {
 describe('EmailValidation', () => {
   test('should return error if any validation fails', () => {
     const fieldName = faker.database.column()
-    const { sut, fieldValidationsSpy }= makeSut(fieldName)
+    const { sut, fieldValidationsSpy } = makeSut(fieldName)
     const errorMessage = faker.random.words()
     fieldValidationsSpy[0].error = new Error(errorMessage)
     fieldValidationsSpy[1].error = new Error(faker.random.words())
@@ -36,7 +36,7 @@ describe('EmailValidation', () => {
 
   test('should return error if any validation fails', () => {
     const fieldName = faker.database.column()
-    const { sut }= makeSut(fieldName)
+    const { sut } = makeSut(fieldName)
 
     const error = sut.validate(fieldName, faker.random.word())
 

@@ -1,6 +1,6 @@
-import { InvalidFieldError } from "@/validation/errors/invalid-field-error";
-import { MinLengthValidation } from "@/validation/validators";
-import faker from "faker"
+import { InvalidFieldError } from '@/validation/errors/invalid-field-error'
+import { MinLengthValidation } from '@/validation/validators'
+import faker from 'faker'
 
 const makeSut = (): MinLengthValidation => new MinLengthValidation(
   faker.database.column(), 5

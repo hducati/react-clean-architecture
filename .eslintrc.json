@@ -17,7 +17,9 @@
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/camelcase": "off",
-    "@typescript-eslint/naming-convention": "[...]",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/comma-spacing": "off",
+    "typescript-eslint/return-await": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
   }
