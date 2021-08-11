@@ -41,6 +41,16 @@ describe('RemoteAddAccount', () => {
     expect(httpPostClientSpy.body).toEqual(addAccountParams)
   })
 
+  test('should throw UnexpectedError if HttpPostClient return 400', async () => {
+    const { sut, httpPostClientSpy } = makeSut()
+    httpPostClientSpy.response = {
+      statusCode: HttpStatusCode.badRequest
+    }
+
+    const promise = sut.add(mockAddAccountParams())
+    await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
   test('should throw EmailInUseError if HttpPostClient return 403', async () => {
     const { sut, httpPostClientSpy } = makeSut()
     httpPostClientSpy.response = {
@@ -51,10 +61,10 @@ describe('RemoteAddAccount', () => {
     await expect(promise).rejects.toThrow(new EmailInUseError())
   })
 
-  test('should throw UnexpectedError if HttpPostClient return 400', async () => {
+  test('should throw UnexpectedError if HttpPostClient return 404', async () => {
     const { sut, httpPostClientSpy } = makeSut()
     httpPostClientSpy.response = {
-      statusCode: HttpStatusCode.badRequest
+      statusCode: HttpStatusCode.notFound
     }
 
     const promise = sut.add(mockAddAccountParams())
