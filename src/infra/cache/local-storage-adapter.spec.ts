@@ -19,15 +19,4 @@ describe('LocalStorageAdapter', () => {
       key, value
     )
   })
-
-  test('should throw error if localStorage throws', async () => {
-    const sut = makeSut()
-    const key = faker.database.column()
-    const value = faker.random.word()
-    await sut.set(key, value)
-
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      key, value
-    )
-  })
 })
