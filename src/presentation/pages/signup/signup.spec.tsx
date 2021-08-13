@@ -30,15 +30,6 @@ const simulateValidSubmit = async (
   await waitFor(() => form)
 }
 
-const testElementExists = (
-  sut: RenderResult,
-  fieldName: string
-): void => {
-  const element = sut.getByTestId(fieldName)
-
-  expect(element).toBeTruthy()
-}
-
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
@@ -132,6 +123,6 @@ describe('SignUp component', () => {
   test('should show spinner on submit', async () => {
     const { sut } = makeSut()
     await simulateValidSubmit(sut)
-    testElementExists(sut, 'spinner')
+    Helper.testElementExists(sut, 'spinner')
   })
 })
