@@ -3,3 +3,4 @@ public
 coverage
 .vscode
 *.scss
+*.json
