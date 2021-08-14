@@ -14,7 +14,7 @@
   },
   "plugins": ["react", "cypress"],
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": "./tsconfig-eslint.json",
     "sourceType": "module"
   },
   "rules": {
