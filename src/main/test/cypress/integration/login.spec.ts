@@ -56,13 +56,21 @@ describe('Login', () => {
     cy.url().should('eq', `${baseUrl}/login`)
   })
 
-  it('should present save accesstoken if valid credentials are provided', () => {
-    cy.mockRequest('POST', /login/, 200, { accessToken: faker.datatype.uuid() })
+  it('should save accesstoken if valid credentials are provided', () => {
     cy.getByTestId('email').focus().type('mango@gmail.com')
     cy.getByTestId('password').focus().type('12345')
     cy.getByTestId('submit').click()
     cy.getByTestId('main-error').should('not.exist')
     cy.url().should('eq', `${baseUrl}/`)
     cy.window().then(window => assert.isOk(window.localStorage.getItem('accessToken')))
+  })
+
+  it('should present UnexpectedError if invalid data is returned', () => {
+    cy.mockRequest('POST', /login/, 200, { invalidProperty: faker.datatype.uuid() })
+    cy.getByTestId('email').focus().type('mango@gmail.com')
+    cy.getByTestId('password').focus().type('12345')
+    cy.getByTestId('submit').click()
+    cy.getByTestId('main-error').should('exist')
+    cy.url().should('eq', `${baseUrl}/login`)
   })
 })
