@@ -5,7 +5,5 @@ Cypress.Commands.add('mockRequest', (method, url, statusCode, body) =>
     url: url
   }, {
     statusCode: statusCode,
-    body: {
-      body
-    }
+    body: body
   }))

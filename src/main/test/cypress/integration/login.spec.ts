@@ -57,6 +57,7 @@ describe('Login', () => {
   })
 
   it('should save accesstoken if valid credentials are provided', () => {
+    cy.mockRequest('POST', /login/, 200, { accessToken: faker.datatype.uuid() })
     cy.getByTestId('email').focus().type(faker.internet.email())
     cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5))
     cy.getByTestId('submit').click()
@@ -72,5 +73,13 @@ describe('Login', () => {
     cy.getByTestId('submit').click()
     cy.getByTestId('main-error').should('exist')
     cy.url().should('eq', `${baseUrl}/login`)
+  })
+
+  it('should prevent multiple submits', () => {
+    cy.mockRequest('POST', /login/, 200, { accessToken: faker.datatype.uuid() }).as('request')
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5))
+    cy.getByTestId('submit').dblclick()
+    cy.get('@request.all').should('have.length', 1)
   })
 })
