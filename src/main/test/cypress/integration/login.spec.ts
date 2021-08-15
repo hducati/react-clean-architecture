@@ -68,9 +68,8 @@ describe('Login', () => {
 
   it('should present UnexpectedError if invalid data is returned', () => {
     cy.mockRequest('POST', /login/, 200, { invalidProperty: faker.datatype.uuid() })
-    cy.getByTestId('email').focus().type('mango@gmail.com')
-    cy.getByTestId('password').focus().type('12345')
-    cy.getByTestId('submit').click()
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5)).type('{enter}')
     cy.getByTestId('main-error').should('exist')
     cy.url().should('eq', `${baseUrl}/login`)
   })
