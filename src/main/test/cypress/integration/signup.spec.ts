@@ -64,4 +64,11 @@ describe('Login', () => {
     FormHelper.testMainError('Esse e-mail já está em uso')
     FormHelper.testUrl('/signup')
   })
+
+  it('should present UnexpectedError if invalid data is returned', () => {
+    Http.mockInvalidData()
+    simulateValidSubmit()
+    cy.getByTestId('main-error').should('exist')
+    FormHelper.testUrl('/signup')
+  })
 })
