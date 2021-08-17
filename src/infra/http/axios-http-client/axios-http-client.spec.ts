@@ -6,17 +6,17 @@ import axios from 'axios'
 
 jest.mock('axios')
 
-type SutTypes = {
-  sut: AxiosHttpClient
+type SubjectTypes = {
+  subject: AxiosHttpClient
   mockedAxios: jest.Mocked<typeof axios>
 }
 
-const makeSut = (): SutTypes => {
-  const sut = new AxiosHttpClient()
+const makeSubject = (): SubjectTypes => {
+  const subject = new AxiosHttpClient()
   const mockedAxios = mockAxios()
 
   return {
-    sut,
+    subject,
     mockedAxios
   }
 }
@@ -24,25 +24,25 @@ const makeSut = (): SutTypes => {
 describe('AxiosHttpClient', () => {
   test('should call axios with correct values', async () => {
     const request = mockPostRequest()
-    const { sut, mockedAxios } = makeSut()
-    await sut.post(request)
+    const { subject, mockedAxios } = makeSubject()
+    await subject.post(request)
 
     expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
   })
 
   test('should return the correct statusCode and body', () => {
-    const { sut, mockedAxios } = makeSut()
-    const promise = sut.post(mockPostRequest())
+    const { subject, mockedAxios } = makeSubject()
+    const promise = subject.post(mockPostRequest())
 
     expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
   })
 
   test('should return the correct statusCode and body on failure', () => {
-    const { sut, mockedAxios } = makeSut()
+    const { subject, mockedAxios } = makeSubject()
     mockedAxios.post.mockRejectedValueOnce({
       response: mockHttpResponse()
     })
-    const promise = sut.post(mockPostRequest())
+    const promise = subject.post(mockPostRequest())
     expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
   })
 })

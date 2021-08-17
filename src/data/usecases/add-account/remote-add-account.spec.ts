@@ -6,17 +6,17 @@ import { EmailInUseError, UnexpectedError } from '@/domain/errors'
 import faker from 'faker'
 import { HttpStatusCode } from '@/data/protocols/http'
 
-type SutTypes = {
-  sut: RemoteAddAccount
+type SubjectTypes = {
+  subject: RemoteAddAccount
   httpPostClientSpy: HttpPostClientSpy<AccountModel>
 }
 
-const makeSut = (url: string = faker.internet.url()): SutTypes => {
+const makeSubject = (url: string = faker.internet.url()): SubjectTypes => {
   const httpPostClientSpy = new HttpPostClientSpy<AccountModel>()
-  const sut = new RemoteAddAccount(url, httpPostClientSpy)
+  const subject = new RemoteAddAccount(url, httpPostClientSpy)
 
   return {
-    sut,
+    subject,
     httpPostClientSpy
   }
 }
@@ -24,72 +24,72 @@ const makeSut = (url: string = faker.internet.url()): SutTypes => {
 describe('RemoteAddAccount', () => {
   test('should call HttpPostClient with correct url', async () => {
     const url = faker.internet.url()
-    const { sut, httpPostClientSpy } = makeSut(url)
+    const { subject, httpPostClientSpy } = makeSubject(url)
 
-    await sut.add(mockAddAccountParams())
+    await subject.add(mockAddAccountParams())
 
     expect(httpPostClientSpy.url).toBe(url)
   })
 
   test('should call HttpPostClient with correct body', async () => {
-    const { sut, httpPostClientSpy } = makeSut()
+    const { subject, httpPostClientSpy } = makeSubject()
     const addAccountParams = mockAddAccountParams()
 
-    await sut.add(addAccountParams)
+    await subject.add(addAccountParams)
 
     expect(httpPostClientSpy.body).toEqual(addAccountParams)
   })
 
   test('should return an AccountModel if HttpPostClient returns 200', async () => {
-    const { sut, httpPostClientSpy } = makeSut()
+    const { subject, httpPostClientSpy } = makeSubject()
     const httpResult = mockAccountModel()
     httpPostClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResult
     }
 
-    const account = await sut.add(mockAddAccountParams())
+    const account = await subject.add(mockAddAccountParams())
 
     expect(account).toEqual(httpResult)
   })
 
   test('should throw UnexpectedError if HttpPostClient returns 400', async () => {
-    const { sut, httpPostClientSpy } = makeSut()
+    const { subject, httpPostClientSpy } = makeSubject()
     httpPostClientSpy.response = {
       statusCode: HttpStatusCode.badRequest
     }
 
-    const promise = sut.add(mockAddAccountParams())
+    const promise = subject.add(mockAddAccountParams())
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
   test('should throw EmailInUseError if HttpPostClient returns 403', async () => {
-    const { sut, httpPostClientSpy } = makeSut()
+    const { subject, httpPostClientSpy } = makeSubject()
     httpPostClientSpy.response = {
       statusCode: HttpStatusCode.forbidden
     }
 
-    const promise = sut.add(mockAddAccountParams())
+    const promise = subject.add(mockAddAccountParams())
     await expect(promise).rejects.toThrow(new EmailInUseError())
   })
 
   test('should throw UnexpectedError if HttpPostClient returns 404', async () => {
-    const { sut, httpPostClientSpy } = makeSut()
+    const { subject, httpPostClientSpy } = makeSubject()
     httpPostClientSpy.response = {
       statusCode: HttpStatusCode.notFound
     }
 
-    const promise = sut.add(mockAddAccountParams())
+    const promise = subject.add(mockAddAccountParams())
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
   test('should throw UnexpectedError if HttpPostClient returns 500', async () => {
-    const { sut, httpPostClientSpy } = makeSut()
+    const { subject, httpPostClientSpy } = makeSubject()
     httpPostClientSpy.response = {
       statusCode: HttpStatusCode.serverError
     }
 
-    const promise = sut.add(mockAddAccountParams())
+    const promise = subject.add(mockAddAccountParams())
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })

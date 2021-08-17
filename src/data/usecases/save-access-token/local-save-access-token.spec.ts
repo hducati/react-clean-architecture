@@ -3,42 +3,42 @@ import { SetStorageMock } from '@/data/test'
 import faker from 'faker'
 import { UnexpectedError } from '@/domain/errors'
 
-type SutTypes = {
-  sut: LocalSaveAccessToken
+type SubjectTypes = {
+  subject: LocalSaveAccessToken
   setStorageMock: SetStorageMock
 }
 
-const makeSut = (): SutTypes => {
+const makeSubject = (): SubjectTypes => {
   const setStorageMock = new SetStorageMock()
-  const sut = new LocalSaveAccessToken(setStorageMock)
+  const subject = new LocalSaveAccessToken(setStorageMock)
 
   return {
     setStorageMock,
-    sut
+    subject
   }
 }
 
 describe('LocalSaveAccessToken', () => {
   test('should call SetStorage with correct value', async () => {
-    const { setStorageMock, sut } = makeSut()
+    const { setStorageMock, subject } = makeSubject()
     const accessToken = faker.datatype.uuid()
-    await sut.save(accessToken)
+    await subject.save(accessToken)
 
     expect(setStorageMock.key).toBe('accessToken')
     expect(setStorageMock.value).toBe(accessToken)
   })
 
   test('should throw error if SetStorage throws', async () => {
-    const { setStorageMock, sut } = makeSut()
+    const { setStorageMock, subject } = makeSubject()
     jest.spyOn(setStorageMock, 'set').mockRejectedValueOnce(new Error())
-    const promise = sut.save(faker.datatype.uuid())
+    const promise = subject.save(faker.datatype.uuid())
 
     await expect(promise).rejects.toThrow(new Error())
   })
 
   test('should throw error if accessToken is falsy', async () => {
-    const { sut } = makeSut()
-    const promise = sut.save(undefined)
+    const { subject } = makeSubject()
+    const promise = subject.save(undefined)
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
