@@ -22,27 +22,32 @@ const makeSubject = (): SubjectTypes => {
 }
 
 describe('AxiosHttpClient', () => {
-  test('should call axios with correct values', async () => {
-    const request = mockPostRequest()
-    const { subject, mockedAxios } = makeSubject()
-    await subject.post(request)
+  describe('post', () => {
+    test('should call axios.post with correct values', async () => {
+      const request = mockPostRequest()
+      const { subject, mockedAxios } = makeSubject()
+      await subject.post(request)
 
-    expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
-  })
-
-  test('should return the correct statusCode and body', () => {
-    const { subject, mockedAxios } = makeSubject()
-    const promise = subject.post(mockPostRequest())
-
-    expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
-  })
-
-  test('should return the correct statusCode and body on failure', () => {
-    const { subject, mockedAxios } = makeSubject()
-    mockedAxios.post.mockRejectedValueOnce({
-      response: mockHttpResponse()
+      expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
     })
-    const promise = subject.post(mockPostRequest())
-    expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+
+    test('should return the correct response on axios.post', () => {
+      const { subject, mockedAxios } = makeSubject()
+      const promise = subject.post(mockPostRequest())
+
+      expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    })
+
+    test('should return the correct error on axio.post', () => {
+      const { subject, mockedAxios } = makeSubject()
+      mockedAxios.post.mockRejectedValueOnce({
+        response: mockHttpResponse()
+      })
+      const promise = subject.post(mockPostRequest())
+      expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    })
+  })
+  describe('post', () => {
+
   })
 })
