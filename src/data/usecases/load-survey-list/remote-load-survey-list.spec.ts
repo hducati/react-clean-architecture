@@ -3,6 +3,7 @@ import { HttpGetClientSpy } from '@/data/test'
 import { RemoteLoadSurveyList } from '@/data/usecases/load-survey-list/remote-load-survey-list'
 import { UnexpectedError } from '@/domain/errors'
 import { SurveyModel } from '@/domain/models'
+import { mockSurveyListModel } from '@/domain/test'
 import faker from 'faker'
 
 type SubjectTypes = {
@@ -57,5 +58,18 @@ describe('RemoteLoadSurveyList', () => {
 
     const promise = subject.loadAll()
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  test('should return an list of SurveyModels if HttpGetClient returns 200', async () => {
+    const { subject, httpGetClientSpy } = makeSubject()
+    const httpResult = mockSurveyListModel()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult
+    }
+
+    const surveyList = await subject.loadAll()
+
+    expect(surveyList).toEqual(httpResult)
   })
 })
