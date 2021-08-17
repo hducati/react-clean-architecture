@@ -1,18 +1,21 @@
+import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { RemoteLoadSurveyList } from '@/data/usecases/load-survey-list/remote-load-survey-list'
+import { UnexpectedError } from '@/domain/errors'
+import { SurveyModel } from '@/domain/models'
 import faker from 'faker'
 
-type SutTypes = {
-  sut: RemoteLoadSurveyList
-  httpGetClientSpy: HttpGetClientSpy
+type SubjectTypes = {
+  subject: RemoteLoadSurveyList
+  httpGetClientSpy: HttpGetClientSpy<SurveyModel[]>
 }
 
-const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy()
-  const sut = new RemoteLoadSurveyList(url, httpGetClientSpy)
+const makeSubject = (url = faker.internet.url()): SubjectTypes => {
+  const httpGetClientSpy = new HttpGetClientSpy<SurveyModel[]>()
+  const subject = new RemoteLoadSurveyList(url, httpGetClientSpy)
 
   return {
-    sut,
+    subject,
     httpGetClientSpy
   }
 }
@@ -20,9 +23,19 @@ const makeSut = (url = faker.internet.url()): SutTypes => {
 describe('RemoteLoadSurveyList', () => {
   test('should call HttpGetClient with correct URL', async () => {
     const url = faker.internet.url()
-    const { sut, httpGetClientSpy } = makeSut(url)
-    await sut.loadAll()
+    const { subject, httpGetClientSpy } = makeSubject(url)
+    await subject.loadAll()
 
     expect(httpGetClientSpy.url).toBe(url)
+  })
+
+  test('should throw UnexpectedError if HttpPostClient returns 403', async () => {
+    const { subject, httpGetClientSpy } = makeSubject()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.forbidden
+    }
+
+    const promise = subject.loadAll()
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })
