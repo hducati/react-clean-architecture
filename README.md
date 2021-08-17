@@ -17,3 +17,14 @@ In this course, we will examine some of the following concepts:
 * Keep It Simple, Silly (KISS)
 * Composition Over Inheritance
 * Small Commits
+
+## Design Patterns
+
+* Factory
+* Adapter
+* Composite
+* Decorator
+* Dependency Injection
+* Composition Root
+* Builder
+* Proxy
