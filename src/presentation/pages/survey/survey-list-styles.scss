@@ -1,0 +1,151 @@
+@import '../../styles/colors.scss';
+
+.surveyListWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  background-color: $disabledBackground;
+
+  .headerWrap {
+    display: flex;
+    background-color: $primary;
+    border-top: 40px solid $primaryDark;
+    justify-content: center;
+
+    .headerContent {
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+      justify-content: space-between;
+      max-width: 800px;
+      padding: 24px 40px;
+  
+      img {
+        width: 60px;
+        align-self: center;
+      }
+
+      .logoutWrap {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        align-items: flex-end;
+        justify-content: center;
+        color: $white;
+
+        span {
+          font-size: 16px;
+          margin-bottom: 8px;
+        }
+
+        a {
+          color: $white;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .contentWrap {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-self: center;
+    max-width: 800px;
+    width: 100%;
+    padding: 40px;
+
+    h2 {
+      color: $primaryDark;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      li {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 48%;
+        justify-content: space-between;
+        height: 250px;
+        margin-bottom: 24px;
+        background-color: $white;
+        border-radius: 8px;
+        box-shadow: 0px 1px 3px -1px $black;
+
+        .surveyContent {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          border-radius: 8px 8px 0px 0px;
+          flex-grow: 1;
+          background-repeat: no-repeat;
+          background-image: 
+            linear-gradient(to right, rgba($primaryLight, 0.1), rgba($primaryLight, 0.1)),
+            linear-gradient(to right, $white, $white);
+          background-position: 0 0, 54 0;
+          background-size: 54px 100%, 100% 100%;
+
+          time {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            justify-content: center;
+            align-self: center;
+            align-items: center;
+            width: 60px;
+            height: 100px;
+            border-radius: 8px;
+            background-color: $primaryLight;
+            color: $white;
+            margin-left: 24px;
+
+            .day {
+              font-size: 40px;
+              font-weight: bold;
+            }
+            .month {
+              text-transform: lowercase;
+              margin: 0px 0px 5px;
+            }
+            .year {
+              font-size: 16px;
+            }
+          }
+
+          p {
+            font-size: 18px;
+            margin: 24px;
+            align-self: center;
+          }
+        }
+
+        footer {
+          line-height: 40px;
+          text-transform: lowercase;
+          text-align: center;
+          border-radius: 0px 0px 8px 8px;
+          cursor: pointer;
+          background-color: $primary;
+          color: $white;
+
+          &:hover {
+            background-color: $primaryDark;
+          }
+        }
+      }
+    }
+  }
+}
