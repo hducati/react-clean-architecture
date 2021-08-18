@@ -1,6 +1,6 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { SurveyList } from '@/presentation/pages'
-import React from 'react'
+import React, { memo } from 'react'
 
 type Factory = {
   makeLogin: React.FC
@@ -19,4 +19,4 @@ const Router: React.FC<Factory> = (factory: Factory) => {
   )
 }
 
-export default Router
+export default memo(Router)
