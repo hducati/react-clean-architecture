@@ -16,7 +16,7 @@ const simulateValidSubmit = (): void => {
   cy.getByTestId('submit').click()
 }
 
-describe('Login', () => {
+describe('SignUp', () => {
   beforeEach(() => {
     cy.visit('signup')
   })
