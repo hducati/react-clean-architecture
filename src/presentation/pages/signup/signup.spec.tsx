@@ -2,7 +2,7 @@ import SignUp from './signup'
 import React from 'react'
 import faker from 'faker'
 import { RenderResult, render, cleanup, fireEvent, waitFor } from '@testing-library/react'
-import { Helper, ValidationStub, AddAccountSpy, SaveAccessTokenMock } from '@/presentation/test'
+import { Helper, ValidationStub, AddAccountSpy, UpdateCurrentAccountMock } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 import { createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
@@ -10,7 +10,7 @@ import { Router } from 'react-router-dom'
 type SubjectTypes = {
   subject: RenderResult
   addAccountSpy: AddAccountSpy
-  saveAccessTokenMock: SaveAccessTokenMock
+  updateCurrentAccountMock: UpdateCurrentAccountMock
 }
 
 type SubjectParams = {
@@ -21,7 +21,7 @@ const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSubject = (params?: SubjectParams): SubjectTypes => {
   const validationStub = new ValidationStub()
   const addAccountSpy = new AddAccountSpy()
-  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const updateCurrentAccountMock = new UpdateCurrentAccountMock()
 
   validationStub.errorMessage = params?.validationError
   const subject = render(
@@ -29,7 +29,7 @@ const makeSubject = (params?: SubjectParams): SubjectTypes => {
       <SignUp
         validation={validationStub}
         addAccount={addAccountSpy}
-        saveAccessToken={saveAccessTokenMock}
+        updateCurrentAccount={updateCurrentAccountMock}
       />
     </Router>
   )
@@ -37,7 +37,7 @@ const makeSubject = (params?: SubjectParams): SubjectTypes => {
   return {
     subject,
     addAccountSpy,
-    saveAccessTokenMock
+    updateCurrentAccountMock
   }
 }
 
@@ -189,21 +189,21 @@ describe('SignUp component', () => {
     Helper.testChildCount(subject, 'error-wrap', 1)
   })
 
-  test('should call SaveAccessToken on success', async () => {
-    const { subject, addAccountSpy, saveAccessTokenMock } = makeSubject()
+  test('should call UpdateCurrentAccount on success', async () => {
+    const { subject, addAccountSpy, updateCurrentAccountMock } = makeSubject()
 
     await simulateValidSubmit(subject)
 
-    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(updateCurrentAccountMock.account).toEqual(addAccountSpy.account)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
   })
 
   test('should present error if SaveAccessToken fails', async () => {
-    const { subject, saveAccessTokenMock } = makeSubject()
+    const { subject, updateCurrentAccountMock } = makeSubject()
     const error = new EmailInUseError()
 
-    jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error)
+    jest.spyOn(updateCurrentAccountMock, 'save').mockRejectedValueOnce(error)
 
     await simulateValidSubmit(subject)
 

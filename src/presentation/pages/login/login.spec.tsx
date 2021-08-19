@@ -4,13 +4,13 @@ import { createMemoryHistory } from 'history'
 import faker from 'faker'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
-import { AuthenticationSpy, ValidationStub, SaveAccessTokenMock, Helper } from '@/presentation/test'
+import { AuthenticationSpy, ValidationStub, UpdateCurrentAccountMock, Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
 
 type SubjectTypes = {
   subject: RenderResult
   authenticationSpy: AuthenticationSpy
-  saveAccessTokenMock: SaveAccessTokenMock
+  updateCurrentAccountMock: UpdateCurrentAccountMock
 }
 
 type SubjectParams = {
@@ -24,14 +24,14 @@ const history = createMemoryHistory({
 const makeSubject = (params?: SubjectParams): SubjectTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const updateCurrentAccountMock = new UpdateCurrentAccountMock()
   validationStub.errorMessage = params?.validationError
   const subject = render(
     <Router history={history}>
       <Login
         validation={validationStub}
         authentication={authenticationSpy}
-        saveAccessToken={saveAccessTokenMock}
+        updateCurrentAccount={updateCurrentAccountMock}
       />
     </Router>
   )
@@ -39,7 +39,7 @@ const makeSubject = (params?: SubjectParams): SubjectTypes => {
   return {
     subject,
     authenticationSpy,
-    saveAccessTokenMock
+    updateCurrentAccountMock
   }
 }
 
@@ -160,21 +160,21 @@ describe('Login component', () => {
     Helper.testChildCount(subject, 'error-wrap', 1)
   })
 
-  test('should call SaveAccessToken on success', async () => {
-    const { subject, authenticationSpy, saveAccessTokenMock } = makeSubject()
+  test('should call UpdateCurrentAccount on success', async () => {
+    const { subject, authenticationSpy, updateCurrentAccountMock } = makeSubject()
 
     await simulateValidSubmit(subject)
 
-    expect(saveAccessTokenMock.accessToken).toBe(authenticationSpy.account.accessToken)
+    expect(updateCurrentAccountMock.account).toEqual(authenticationSpy.account)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
   })
 
   test('should present error if SaveAccessToken fails', async () => {
-    const { subject, saveAccessTokenMock } = makeSubject()
+    const { subject, updateCurrentAccountMock } = makeSubject()
     const error = new InvalidCredentialsError()
 
-    jest.spyOn(saveAccessTokenMock, 'save').mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(updateCurrentAccountMock, 'save').mockReturnValueOnce(Promise.reject(error))
 
     await simulateValidSubmit(subject)
 
