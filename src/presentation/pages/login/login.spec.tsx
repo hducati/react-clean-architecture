@@ -1,7 +1,7 @@
 import React from 'react'
+import faker from 'faker'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
-import faker from 'faker'
 import { ApiContext } from '@/presentation/contexts'
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
@@ -65,8 +65,8 @@ describe('Login component', () => {
 
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
-    Helper.testButtonIsDisabled('submit', true)
-    Helper.testChildCount('error-wrap', 0)
+    expect(screen.getByTestId('submit')).toBeDisabled()
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
   })
 
   test('should show email error Validation fails', () => {
@@ -87,30 +87,32 @@ describe('Login component', () => {
 
   test('should show valid password state if Validation success', () => {
     makeSubject()
-    Helper.populateField('password')
 
+    Helper.populateField('password')
     Helper.testStatusForField('password')
   })
 
   test('should show valid email state if Validation success', () => {
     makeSubject()
-    Helper.populateField('email')
 
+    Helper.populateField('email')
     Helper.testStatusForField('email')
   })
 
   test('should enabled submit button if form is valid', () => {
     makeSubject()
+
     Helper.populateField('email')
     Helper.populateField('password')
-    Helper.testButtonIsDisabled('submit', false)
+
+    expect(screen.getByTestId('submit')).toBeEnabled()
   })
 
   test('should show spinner on submit', async () => {
     makeSubject()
     await simulateValidSubmit()
 
-    Helper.testElementExists('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('should call Authentication with correct values', async () => {
@@ -152,8 +154,8 @@ describe('Login component', () => {
 
     await simulateValidSubmit()
 
-    Helper.testElementText('main-error', error.message)
-    Helper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
   test('should call UpdateCurrentAccount on success', async () => {

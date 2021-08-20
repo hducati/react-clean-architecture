@@ -64,12 +64,12 @@ describe('SignUp component', () => {
     const validationError = faker.random.word()
     makeSubject({ validationError })
 
-    Helper.testChildCount('error-wrap', 0)
-    Helper.testButtonIsDisabled('submit', true)
     Helper.testStatusForField('name', validationError)
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
     Helper.testStatusForField('passwordConfirmation', validationError)
+    expect(screen.getByTestId('submit')).toBeDisabled()
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
   })
 
   test('should throw name error if Validation fails', () => {
@@ -130,13 +130,15 @@ describe('SignUp component', () => {
     Helper.populateField('email')
     Helper.populateField('password')
     Helper.populateField('passwordConfirmation')
-    Helper.testButtonIsDisabled('submit', false)
+    expect(screen.getByTestId('submit')).toBeEnabled()
   })
 
   test('should show spinner on submit', async () => {
     makeSubject()
+
     await simulateValidSubmit()
-    Helper.testElementExists('spinner')
+
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('should call AddAccount with correct values', async () => {
@@ -183,8 +185,8 @@ describe('SignUp component', () => {
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(emailError)
     await simulateValidSubmit()
 
-    Helper.testElementText('main-error', emailError.message)
-    Helper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(emailError.message)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
   test('should call UpdateCurrentAccount on success', async () => {
