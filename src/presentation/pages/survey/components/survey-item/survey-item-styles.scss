@@ -1,0 +1,88 @@
+@import '../../../../styles/colors.scss';
+
+.surveyItemWrap {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 48%;
+  justify-content: space-between;
+  min-height: 250px;
+  margin-bottom: 24px;
+  background-color: $white;
+  border-radius: 8px;
+  box-shadow: 0px 1px 3px -1px $black;
+
+  .surveyContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 8px 8px 0px 0px;
+    flex-grow: 1;
+    background-repeat: no-repeat;
+    background-image: 
+      linear-gradient(to right, rgba($primaryLight, 0.1), rgba($primaryLight, 0.1)),
+      linear-gradient(to right, $white, $white);
+    background-position: 0 0, 54 0;
+    background-size: 54px 100%, 100% 100%;
+    position: relative;
+
+    .iconWrap {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+    }
+
+    time {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      justify-content: center;
+      align-self: center;
+      align-items: center;
+      width: 60px;
+      height: 100px;
+      border-radius: 8px;
+      background-color: $primaryLight;
+      color: $white;
+      margin-left: 24px;
+
+      .day {
+        font-size: 40px;
+        font-weight: bold;
+      }
+      .month {
+        text-transform: lowercase;
+        margin: 0px 0px 5px;
+      }
+      .year {
+        font-size: 16px;
+      }
+    }
+
+    p {
+      font-size: 18px;
+      margin: 24px;
+      align-self: center;
+      flex-grow: 1;
+    }
+  }
+
+  footer {
+    line-height: 40px;
+    text-transform: lowercase;
+    text-align: center;
+    border-radius: 0px 0px 8px 8px;
+    cursor: pointer;
+    background-color: $primary;
+    color: $white;
+
+    &:hover {
+      background-color: $primaryDark;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .surveyItemWrap {
+    flex-basis: 100%;
+  }
+}
