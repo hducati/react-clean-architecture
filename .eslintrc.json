@@ -23,6 +23,7 @@
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/comma-spacing": "off",
+    "@typescript-eslint/no-floating-promises": "off",
     "typescript-eslint/return-await": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
