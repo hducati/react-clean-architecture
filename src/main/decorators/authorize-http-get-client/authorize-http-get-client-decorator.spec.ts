@@ -1,34 +1,45 @@
-import { mockGetRequest , GetStorageSpy } from '@/data/test'
+import { HttpGetParams } from '@/data/protocols/http'
+import { mockGetRequest , GetStorageSpy, HttpGetClientSpy } from '@/data/test'
 import { AuthorizeHttpGetClientDecorator } from '@/main/decorators'
+import faker from 'faker'
 
 type SubjectTypes = {
   subject: AuthorizeHttpGetClientDecorator
   getStorageSpy: GetStorageSpy
+  httpGetClientSpy: HttpGetClientSpy
 }
 
 const makeSubject = (): SubjectTypes => {
   const getStorageSpy = new GetStorageSpy()
-  const subject = new AuthorizeHttpGetClientDecorator(getStorageSpy)
+  const httpGetClientSpy = new HttpGetClientSpy()
+  const subject = new AuthorizeHttpGetClientDecorator(getStorageSpy, httpGetClientSpy)
 
   return {
     subject,
-    getStorageSpy
+    getStorageSpy,
+    httpGetClientSpy
   }
 }
 
 describe('AuthorizeHttpGetClientDecorator', () => {
-  test('should call GetStorage with correct value', () => {
-    const getStorageSpy = new GetStorageSpy()
-    const subject = new AuthorizeHttpGetClientDecorator(getStorageSpy)
-    subject.get(mockGetRequest())
+  test('should call GetStorage with correct value', async () => {
+    const { subject, getStorageSpy } = makeSubject()
+    await subject.get(mockGetRequest())
 
     expect(getStorageSpy.key).toBe('account')
   })
 
-  test('should not add headers if getStorage is invalid', () => {
-    const { subject, getStorageSpy } = makeSubject()
-    subject.get(mockGetRequest())
+  test('should not add headers if getStorage is invalid', async () => {
+    const { subject, httpGetClientSpy } = makeSubject()
+    const httpRequest: HttpGetParams = {
+      url: faker.internet.url(),
+      headers: {
+        field: faker.random.words()
+      }
+    }
+    await subject.get(httpRequest)
 
-    expect(getStorageSpy.key).toBe('account')
+    expect(httpGetClientSpy.url).toBe(httpRequest.url)
+    expect(httpGetClientSpy.headers).toEqual(httpRequest.headers)
   })
 })
