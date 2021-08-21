@@ -59,7 +59,7 @@ describe('AxiosHttpClient', () => {
       const { subject, mockedAxios } = makeSubject()
       await subject.get(request)
 
-      expect(mockedAxios.get).toHaveBeenCalledWith(request.url)
+      expect(mockedAxios.get).toHaveBeenCalledWith(request.url, { headers: request.headers })
     })
 
     test('should call correct response on axios.get', async () => {
