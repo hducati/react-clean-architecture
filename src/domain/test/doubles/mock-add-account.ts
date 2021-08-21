@@ -1,7 +1,8 @@
-import { AddAccountParams } from '@/domain/usecases'
+import { AddAccount } from '@/domain/usecases'
+import { mockAccountModel } from '@/domain/test'
 import faker from 'faker'
 
-export const mockAddAccountParams = (): AddAccountParams => {
+export const mockAddAccountParams = (): AddAccount.Params => {
   const password = faker.internet.password()
 
   return {
@@ -11,3 +12,5 @@ export const mockAddAccountParams = (): AddAccountParams => {
     passwordConfirmation: password
   }
 }
+
+export const mockAddAccountModel = (): AddAccount.Model => mockAccountModel()

@@ -2,17 +2,16 @@ import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { RemoteLoadSurveyList } from '@/data/usecases/load-survey-list/remote-load-survey-list'
 import { UnexpectedError } from '@/domain/errors'
-import { SurveyModel } from '@/domain/models'
 import { mockSurveyListModel } from '@/domain/test'
 import faker from 'faker'
 
 type SubjectTypes = {
   subject: RemoteLoadSurveyList
-  httpGetClientSpy: HttpGetClientSpy<SurveyModel[]>
+  httpGetClientSpy: HttpGetClientSpy<RemoteLoadSurveyList.Model[]>
 }
 
 const makeSubject = (url = faker.internet.url()): SubjectTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<SurveyModel[]>()
+  const httpGetClientSpy = new HttpGetClientSpy<RemoteLoadSurveyList.Model[]>()
   const subject = new RemoteLoadSurveyList(url, httpGetClientSpy)
 
   return {
