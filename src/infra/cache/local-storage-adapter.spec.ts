@@ -20,6 +20,16 @@ describe('LocalStorageAdapter', () => {
     )
   })
 
+  test('should call localStorage.remoteItem if value is undefined', () => {
+    const subject = makeSubject()
+    const key = faker.database.column()
+    subject.set(key, undefined)
+
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      key
+    )
+  })
+
   test('should call localStorage.getItem with correct value', () => {
     const subject = makeSubject()
     const key = faker.database.column()
