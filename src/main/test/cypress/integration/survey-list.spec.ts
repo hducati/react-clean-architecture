@@ -20,4 +20,10 @@ describe('SurveyList', () => {
     Http.mockAccessDeniedError()
     Helper.testUrl('/login')
   })
+
+  it('should present correct username', () => {
+    const { name } = Helper.getLocalStorageItem('account')
+    Http.mockUnexpectedError()
+    cy.getByTestId('username').should('contain.text', name)
+  })
 })
