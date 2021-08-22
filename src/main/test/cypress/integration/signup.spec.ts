@@ -5,7 +5,7 @@ import faker from 'faker'
 
 const path = /signup/
 const mockEmainInUseError = (): void => Http.mockForbiddenError(path, 'POST')
-const mockOk = (): void => Http.mockOkFixture('POST', path, 'account')
+const mockOk = (): void => Http.mockOkFixture(path, 'POST','account')
 
 const populateFields = (): void => {
   const password = faker.random.alphaNumeric(8)

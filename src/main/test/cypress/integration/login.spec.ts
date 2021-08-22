@@ -5,7 +5,7 @@ import faker from 'faker'
 
 const path = /login/
 const mockInvalidCredentialsError = (): void => Http.mockUnauthorizedError(path)
-const mockSuccess = (): void => Http.mockOkFixture('POST', path, 'account')
+const mockSuccess = (): void => Http.mockOkFixture(path, 'POST','account')
 
 const populateFields = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email())

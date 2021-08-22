@@ -36,7 +36,7 @@ export const mockServerError = (url: RegExp, method: string): void => {
   }).as('request')
 }
 
-export const mockOk = (method: string, url: RegExp, response: any): void => {
+export const mockOk = (url: RegExp, method: string, response: any): void => {
   cy.intercept({
     method: method,
     url: url
@@ -46,7 +46,7 @@ export const mockOk = (method: string, url: RegExp, response: any): void => {
   }).as('request')
 }
 
-export const mockOkFixture = (method: string, url: RegExp, fixture: any): void => {
+export const mockOkFixture = (url: RegExp, method: string, fixture: any): void => {
   cy.intercept({
     method: method,
     url: url
