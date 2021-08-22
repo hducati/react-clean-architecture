@@ -1,7 +1,11 @@
-import * as FormHelper from '../support/form-helpers'
-import * as Http from '../support/signup/signup-mocks'
-import * as Helper from '../support/helpers'
+import * as FormHelper from '../utils/form-helpers'
+import * as Http from '../utils/http-mocks'
+import * as Helper from '../utils/helpers'
 import faker from 'faker'
+
+const path = /signup/
+const mockEmainInUseError = (): void => Http.mockForbiddenError(path, 'POST')
+const mockOk = (): void => Http.mockOkFixture('POST', path, 'account')
 
 const populateFields = (): void => {
   const password = faker.random.alphaNumeric(8)
@@ -64,14 +68,14 @@ describe('SignUp', () => {
   })
 
   it('should present EmainInUseError on 403', () => {
-    Http.mockEmainInUseError()
+    mockEmainInUseError()
     simulateValidSubmit()
     FormHelper.testMainError('Esse e-mail já está em uso')
     Helper.testUrl('/signup')
   })
 
   it('should save account if valid credentials are provided', () => {
-    Http.mockOk()
+    mockOk()
     simulateValidSubmit()
     cy.getByTestId('main-error').should('not.exist')
     Helper.testUrl('/')
@@ -79,14 +83,14 @@ describe('SignUp', () => {
   })
 
   it('should prevent multiple submits', () => {
-    Http.mockOk()
+    mockOk()
     populateFields()
     cy.getByTestId('submit').dblclick()
     Helper.testHttpCallsCount(1)
   })
 
   it('should not call submit if form is invalid', () => {
-    Http.mockOk()
+    mockOk()
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
     Helper.testHttpCallsCount(0)
   })
