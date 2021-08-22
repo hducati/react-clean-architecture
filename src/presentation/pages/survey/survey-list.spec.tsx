@@ -3,10 +3,10 @@ import { SurveyList } from '@/presentation/pages'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
 import { createMemoryHistory, MemoryHistory } from 'history'
-import React from 'react'
 import { ApiContext } from '@/presentation/contexts'
 import { Router } from 'react-router-dom'
 import { AccountModel } from '@/domain/models'
+import React from 'react'
 
 type SubjectTypes = {
   loadSurveyListSpy: LoadSurveyListSpy
