@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { SurveyList } from '@/presentation/pages'
 import { UnexpectedError } from '@/domain/errors'
-import { LoadSurveyListSpy } from '@/domain/test'
+import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
 import { createMemoryHistory } from 'history'
 import React from 'react'
 import { ApiContext } from '@/presentation/contexts'
@@ -15,7 +15,10 @@ const makeSubject = (loadSurveyListSpy = new LoadSurveyListSpy()): SubjectTypes 
   const history = createMemoryHistory({ initialEntries: ['/'] })
   const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+    <ApiContext.Provider value={{
+      setCurrentAccount: setCurrentAccountMock,
+      getCurrentAccount: () => mockAccountModel()
+    }}>
       <Router history={history}>
         <SurveyList
           loadSurveyList={loadSurveyListSpy}

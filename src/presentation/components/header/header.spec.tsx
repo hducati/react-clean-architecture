@@ -3,19 +3,23 @@ import { ApiContext } from '@/presentation/contexts'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
-import React from 'react'
 import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
+import React from 'react'
 
 type SubjectTypes = {
   history: MemoryHistory
   setCurrentAccountMock: (account: AccountModel) => void
 }
 
-const makeSubject = (): SubjectTypes => {
+const makeSubject = (account = mockAccountModel()): SubjectTypes => {
   const history = createMemoryHistory({ initialEntries: ['/'] })
   const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+    <ApiContext.Provider value={{
+      setCurrentAccount: setCurrentAccountMock,
+      getCurrentAccount: () => account
+    }}>
       <Router history={history}>
         <Header />
       </Router>
@@ -35,5 +39,11 @@ describe('Header component', () => {
 
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
     expect(history.location.pathname).toBe('/login')
+  })
+
+  test('should render username correctly', () => {
+    const account = mockAccountModel()
+    makeSubject(account)
+    expect(screen.getByTestId('username')).toHaveTextContent(account.name)
   })
 })
