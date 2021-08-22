@@ -8,7 +8,7 @@ export class AxiosHttpClient implements HttpPostClient, HttpGetClient {
     try {
       axiosResponse = await axios.post(params.url, params.body)
     } catch (error) {
-      axiosResponse.status = error.response
+      axiosResponse = error.response
     }
     return this.adaptResponse(axiosResponse)
   }
@@ -19,6 +19,7 @@ export class AxiosHttpClient implements HttpPostClient, HttpGetClient {
     try {
       axiosResponse = await axios.get(params.url, { headers: params.headers })
     } catch (error) {
+      console.log(error)
       axiosResponse = error.response
     }
 
