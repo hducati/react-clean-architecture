@@ -1,7 +1,7 @@
 import { Logo } from '@/presentation/components'
 import { ApiContext } from '@/presentation/contexts'
 import { useHistory } from 'react-router-dom'
-import React, { memo, useContext } from 'react'
+import React, { useContext } from 'react'
 import Styles from './header-styles.scss'
 
 const Header: React.FC = () => {
@@ -26,4 +26,4 @@ const Header: React.FC = () => {
   )
 }
 
-export default memo(Header)
+export default Header
