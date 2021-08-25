@@ -1,6 +1,7 @@
 node_modules
 public
 coverage
+dist
 .vscode
 *.scss
 *.json
