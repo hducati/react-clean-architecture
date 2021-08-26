@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/hducati/react-clean-architecture.svg?branch=master)](https://travis-ci.com/hducati/react-clean-architecture)
 [![Coverage Status](https://coveralls.io/repos/github/hducati/react-clean-architecture/badge.svg?branch=master)](https://coveralls.io/github/hducati/react-clean-architecture?branch=master)
+[![Known Vulnerabilities](https://snyk.io/test/github/hducati/react-clean-architecture/badge.svg)](https://snyk.io/test/github/hducati/react-clean-architecture/badge.svg)
 
 # React Clean Architecture - Course
 
