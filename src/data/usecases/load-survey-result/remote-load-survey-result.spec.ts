@@ -1,5 +1,7 @@
+import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { RemoteLoadSurveyResult } from '@/data/usecases'
+import { AccessDeniedError } from '@/domain/errors'
 import faker from 'faker'
 
 type SubjectTypes = {
@@ -24,5 +26,14 @@ describe('RemoteLoadSurveyResult', () => {
     await subject.load()
 
     expect(httpGetClientSpy.url).toBe(url)
+  })
+
+  test('should throw AccessDeniedError if HttpPostClient returns 403', async () => {
+    const { subject, httpGetClientSpy } = makeSubject()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.forbidden
+    }
+    const promise = subject.load()
+    await expect(promise).rejects.toThrow(new AccessDeniedError())
   })
 })
