@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { RemoteLoadSurveyResult } from '@/data/usecases'
-import { AccessDeniedError } from '@/domain/errors'
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import faker from 'faker'
 
 type SubjectTypes = {
@@ -35,5 +35,14 @@ describe('RemoteLoadSurveyResult', () => {
     }
     const promise = subject.load()
     await expect(promise).rejects.toThrow(new AccessDeniedError())
+  })
+
+  test('should throw UnexpectedError if HttpPostClient returns 404', async () => {
+    const { subject, httpGetClientSpy } = makeSubject()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.notFound
+    }
+    const promise = subject.load()
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })
