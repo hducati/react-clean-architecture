@@ -8,8 +8,8 @@ const makeSubject = (field: string, fieldToCompare: string): CompareFieldsValida
 
 describe('CompareFieldsValidator', () => {
   test('should return error if compare is invalid', () => {
-    const field = faker.database.column()
-    const fieldToCompare = faker.database.column()
+    const field = 'any_column'
+    const fieldToCompare = 'any_column_to_compare'
     const subject = makeSubject(field, fieldToCompare)
     const error = subject.validate({
       [field]: 'any_value',
@@ -20,8 +20,8 @@ describe('CompareFieldsValidator', () => {
   })
 
   test('should return falsy if compare is valid', () => {
-    const field = faker.database.column()
-    const fieldToCompare = faker.database.column()
+    const field = 'any_column'
+    const fieldToCompare = 'any_column_to_compare'
     const value = faker.random.word()
     const subject = makeSubject(field, fieldToCompare)
     const error = subject.validate({
