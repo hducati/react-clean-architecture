@@ -26,8 +26,6 @@ describe('SurveyItem Component', () => {
     })
     makeSubject(survey)
 
-    makeSubject()
-
     expect(screen.getByTestId('day')).toHaveTextContent('03')
     expect(screen.getByTestId('month')).toHaveTextContent('mai')
     expect(screen.getByTestId('year')).toHaveTextContent('2019')

@@ -19,7 +19,7 @@ const SurveyResult: React.FC = () => {
           <>
             <hgroup>
               <Calendar date={new Date()} className={Styles.calendarWrap}/>
-            <h2>Qual é seu framework web favorito?</h2>
+              <h2>Qual é seu framework web favorito?</h2>
             </hgroup>
             <FlipMove className={Styles.answersList}>
               <li>
