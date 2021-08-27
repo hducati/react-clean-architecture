@@ -46,7 +46,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    setState({ ...state, isLoading: true })
+    setState(old => ({ ...old, isLoading: true }))
 
     try {
       if (state.isLoading || state.isFormInvalid) {
@@ -63,11 +63,11 @@ const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
       setCurrentAccount(account)
       history.replace('/')
     } catch (error) {
-      setState({
-        ...state,
+      setState(old => ({
+        ...old,
         isLoading: false,
         mainError: error.message
-      })
+      }))
     }
   }
 

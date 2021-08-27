@@ -1,13 +1,8 @@
-
 import React from 'react'
 import Spinner from '@/presentation/components/spinner/spinner'
-import Styles from '@/presentation/components/loading/loading-styles.scss'
+import Styles from './loading-styles.scss'
 
-type Props = React.HTMLAttributes<HTMLElement> & {
-  isNegative?: boolean
-}
-
-const Loading: React.FC<Props> = (props: Props) => {
+const Loading: React.FC = () => {
   return (
     <div className={Styles.loadingWrap}>
       <div className={Styles.loading}>
