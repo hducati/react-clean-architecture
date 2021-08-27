@@ -16,11 +16,25 @@
     width: 100%;
     flex-grow: 1;
 
-    h2 {
-      color: $primaryDark;
-      font-size: 20px;
-      font-weight: bold;
+    hgroup {
+      display: flex; 
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .calendarWrap {
+        width: 80px;
+        margin-right: 16px;
+      }
+
+      h2 {
+        color: $primaryDark;
+        font-size: 28px;
+        font-weight: bold;
+      }
     }
+
+  
 
     .answersList {
       display: flex;
