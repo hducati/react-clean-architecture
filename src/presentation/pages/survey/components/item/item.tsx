@@ -1,7 +1,7 @@
 import { LoadSurveyList } from '@/domain/usecases'
 import { Calendar, Icon, IconName } from '@/presentation/components'
-import React from 'react'
 import { Link } from 'react-router-dom'
+import React from 'react'
 import Styles from './item-styles.scss'
 
 type Props = {
