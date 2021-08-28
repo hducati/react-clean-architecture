@@ -1,11 +1,26 @@
 import { mockSurveyModel } from '@/domain/test'
 import { IconName } from '@/presentation/components'
 import { SurveyItem } from '@/presentation/pages/survey/components'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { createMemoryHistory, MemoryHistory } from 'history'
 import React from 'react'
+import { Router } from 'react-router-dom'
 
-const makeSubject = (survey = mockSurveyModel()): void => {
-  render(<SurveyItem survey={survey}/>)
+type SubjectTypes = {
+  history: MemoryHistory
+}
+
+const makeSubject = (survey = mockSurveyModel()): SubjectTypes => {
+  const history = createMemoryHistory({ initialEntries: ['/'] })
+  render(
+    <Router history={history}>
+      <SurveyItem survey={survey}/>
+    </Router>
+  )
+
+  return {
+    history
+  }
 }
 
 describe('SurveyItem Component', () => {
@@ -31,5 +46,14 @@ describe('SurveyItem Component', () => {
     expect(screen.getByTestId('year')).toHaveTextContent('2019')
     expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbDown)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
+  })
+
+  test('should go to SurveyResult', () => {
+    const survey = mockSurveyModel()
+    const { history } = makeSubject(survey)
+
+    fireEvent.click(screen.getByTestId('link'))
+
+    expect(history.location.pathname).toBe(`/surveys/${survey.id}`)
   })
 })
