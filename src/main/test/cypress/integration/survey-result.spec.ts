@@ -15,8 +15,8 @@ describe('SurveyResult', () => {
 
   it('should present error on UnexpectedError', () => {
     cy.visit('/surveys/any_id')
-
     mockUnexpectedError()
+
     cy.getByTestId('error').should('contain.text', 'Something went wrong. Please try again')
   })
 
