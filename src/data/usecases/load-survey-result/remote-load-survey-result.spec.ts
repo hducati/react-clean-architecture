@@ -1,41 +1,42 @@
 import { HttpStatusCode } from '@/data/protocols/http'
-import { HttpGetClientSpy, mockRemoteSurveyResultModel } from '@/data/test'
+import { HttpClientSpy, mockRemoteSurveyResultModel } from '@/data/test'
 import { RemoteLoadSurveyResult } from '@/data/usecases'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import faker from 'faker'
 
 type SubjectTypes = {
   subject: RemoteLoadSurveyResult
-  httpGetClientSpy: HttpGetClientSpy
+  httpClientSpy: HttpClientSpy
 }
 
 const makeSubject = (url = faker.internet.url()): SubjectTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy()
-  const subject = new RemoteLoadSurveyResult(url, httpGetClientSpy)
+  const httpClientSpy = new HttpClientSpy()
+  const subject = new RemoteLoadSurveyResult(url, httpClientSpy)
 
   return {
     subject,
-    httpGetClientSpy
+    httpClientSpy
   }
 }
 
 describe('RemoteLoadSurveyResult', () => {
-  test('should call HttpGetClient with correct URL', async () => {
+  test('should call HttpClient with correct URL', async () => {
     const url = faker.internet.url()
-    const { subject, httpGetClientSpy } = makeSubject(url)
-    httpGetClientSpy.response = {
+    const { subject, httpClientSpy } = makeSubject(url)
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: mockRemoteSurveyResultModel()
     }
 
     await subject.load()
 
-    expect(httpGetClientSpy.url).toBe(url)
+    expect(httpClientSpy.url).toBe(url)
+    expect(httpClientSpy.method).toBe('get')
   })
 
   test('should throw AccessDeniedError if HttpPostClient returns 403', async () => {
-    const { subject, httpGetClientSpy } = makeSubject()
-    httpGetClientSpy.response = {
+    const { subject, httpClientSpy } = makeSubject()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.forbidden
     }
     const promise = subject.load()
@@ -43,8 +44,8 @@ describe('RemoteLoadSurveyResult', () => {
   })
 
   test('should throw UnexpectedError if HttpPostClient returns 404', async () => {
-    const { subject, httpGetClientSpy } = makeSubject()
-    httpGetClientSpy.response = {
+    const { subject, httpClientSpy } = makeSubject()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.notFound
     }
     const promise = subject.load()
@@ -52,8 +53,8 @@ describe('RemoteLoadSurveyResult', () => {
   })
 
   test('should throw UnexpectedError if HttpPostClient returns 500', async () => {
-    const { subject, httpGetClientSpy } = makeSubject()
-    httpGetClientSpy.response = {
+    const { subject, httpClientSpy } = makeSubject()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.serverError
     }
     const promise = subject.load()
@@ -61,9 +62,9 @@ describe('RemoteLoadSurveyResult', () => {
   })
 
   test('should return a SurveyResult on 200', async () => {
-    const { subject, httpGetClientSpy } = makeSubject()
+    const { subject, httpClientSpy } = makeSubject()
     const httpResult = mockRemoteSurveyResultModel()
-    httpGetClientSpy.response = {
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResult
     }

@@ -1,1 +1,1 @@
-export * from './authorize-http-get-client/authorize-http-get-client-decorator'
+export * from './authorize-http-client/authorize-http-client-decorator'
