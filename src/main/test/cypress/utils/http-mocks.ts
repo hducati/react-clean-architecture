@@ -49,7 +49,7 @@ export const mockOk = (url: RegExp, method: string, response: any): void => {
 export const mockOkFixture = (url: RegExp, method: string, fixture: any): void => {
   cy.intercept({
     method: method,
-    url: url
+    url: 'surveys/any_id'
   }, {
     statusCode: 200,
     fixture: fixture
