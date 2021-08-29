@@ -10,7 +10,7 @@ type Props = {
 export const makeSurveyResult: React.FC = () => {
   const { id } = useParams<Props>()
   return (
-    <SurveyResult
+  <SurveyResult
       loadSurveyResult={makeRemoteLoadSurveyResult(id)}
     />
   )

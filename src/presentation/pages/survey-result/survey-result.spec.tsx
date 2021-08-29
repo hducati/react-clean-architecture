@@ -15,7 +15,7 @@ type SubjectTypes = {
 }
 
 const makeSubject = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SubjectTypes => {
-  const history = createMemoryHistory({ initialEntries: ['/'] })
+  const history = createMemoryHistory({ initialEntries: ['/', '/surveys/any_id'], initialIndex: 1 })
   const setCurrentAccountMock = jest.fn()
   render(
     <ApiContext.Provider value={{
@@ -118,6 +118,17 @@ describe('SurveyResult Component', () => {
     fireEvent.click(screen.getByTestId('reload'))
 
     expect(loadSurveyResultSpy.callsCount).toBe(1)
+    await waitFor(() => screen.getByTestId('survey-result'))
+  })
+
+  test('should call LoadSurveyList on back button click', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    const { history } = makeSubject(loadSurveyResultSpy)
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+    fireEvent.click(screen.getByTestId('back-button'))
+
+    expect(history.location.pathname).toBe('/')
     await waitFor(() => screen.getByTestId('survey-result'))
   })
 })
