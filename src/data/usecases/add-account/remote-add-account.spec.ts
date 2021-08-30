@@ -21,22 +21,15 @@ const makeSubject = (url: string = faker.internet.url()): SubjectTypes => {
 }
 
 describe('RemoteAddAccount', () => {
-  test('should call HttpClient with correct url and method', async () => {
+  test('should call HttpClient with correct values', async () => {
     const url = faker.internet.url()
-    const { subject, httpClientSpy } = makeSubject(url)
-
-    await subject.add(mockAddAccountParams())
-
-    expect(httpClientSpy.url).toBe(url)
-    expect(httpClientSpy.method).toBe('post')
-  })
-
-  test('should call HttpClient with correct body', async () => {
-    const { subject, httpClientSpy } = makeSubject()
     const addAccountParams = mockAddAccountParams()
+    const { subject, httpClientSpy } = makeSubject(url)
 
     await subject.add(addAccountParams)
 
+    expect(httpClientSpy.url).toBe(url)
+    expect(httpClientSpy.method).toBe('post')
     expect(httpClientSpy.body).toEqual(addAccountParams)
   })
 

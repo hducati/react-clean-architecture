@@ -22,18 +22,15 @@ const makeSubject = (url: string = faker.internet.url()): SubjectTypes => {
 }
 
 describe('RemoteAuthentication', () => {
-  test('should call HttpClient with correct URL and method', async () => {
+  test('should call HttpClient with correct values', async () => {
     const url = faker.internet.url()
+    const authenticationParams = mockAuthentication()
     const { subject, httpClientSpy } = makeSubject(url)
-    await subject.auth(mockAuthentication())
+
+    await subject.auth(authenticationParams)
+
     expect(httpClientSpy.url).toBe(url)
     expect(httpClientSpy.method).toBe('post')
-  })
-
-  test('should call HttpClient with correct body', async () => {
-    const { subject, httpClientSpy } = makeSubject()
-    const authenticationParams = mockAuthentication()
-    await subject.auth(authenticationParams)
     expect(httpClientSpy.body).toEqual(authenticationParams)
   })
 
