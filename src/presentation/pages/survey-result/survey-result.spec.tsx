@@ -168,4 +168,75 @@ describe('SurveyResult Component', () => {
     })
     await waitFor(() => screen.getByTestId('survey-result'))
   })
+
+  test('should render error on UnexpectedError when saving an answer', async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy()
+    const error = new UnexpectedError()
+    jest.spyOn(saveSurveyResultSpy, 'save').mockRejectedValueOnce(error)
+    makeSubject({ saveSurveyResultSpy })
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    const answerWrap = screen.queryAllByTestId('answer-wrap')
+    fireEvent.click(answerWrap[1])
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    expect(screen.queryByTestId('question')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+    expect(screen.getByTestId('error')).toHaveTextContent(error.message)
+  })
+
+  test('should logout on AccessDeniedError when saving result', async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy()
+    jest.spyOn(saveSurveyResultSpy, 'save').mockRejectedValueOnce(new AccessDeniedError())
+    const { history, setCurrentAccountMock } = makeSubject({ saveSurveyResultSpy })
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    const answerWrap = screen.queryAllByTestId('answer-wrap')
+    fireEvent.click(answerWrap[1])
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
+    expect(history.location.pathname).toBe('/login')
+  })
+
+  test('should present SurveyResult data on SaveSurveyResult success', async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy()
+    const surveyResult = Object.assign(mockSurveyResultModel(), {
+      date: new Date('2018-02-20T00:00:00')
+    })
+
+    saveSurveyResultSpy.surveyResult = surveyResult
+    makeSubject({ saveSurveyResultSpy })
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    const answerWrap = screen.queryAllByTestId('answer-wrap')
+    fireEvent.click(answerWrap[1])
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    const images = screen.queryAllByTestId('image')
+    const answers = screen.queryAllByTestId('answer')
+    const percents = screen.queryAllByTestId('percent')
+
+    expect(screen.getByTestId('day')).toHaveTextContent('20')
+    expect(screen.getByTestId('month')).toHaveTextContent('fev')
+    expect(screen.getByTestId('year')).toHaveTextContent('2018')
+    expect(screen.getByTestId('question')).toHaveTextContent(surveyResult.question)
+    expect(screen.getByTestId('answers').childElementCount).toBe(2)
+    expect(images[0]).toHaveAttribute('src', surveyResult.answers[0].image)
+    expect(images[0]).toHaveAttribute('alt', surveyResult.answers[0].answer)
+    expect(images[1]).toBeFalsy()
+    expect(answers[0]).toHaveTextContent(surveyResult.answers[0].answer)
+    expect(answers[1]).toHaveTextContent(surveyResult.answers[1].answer)
+    expect(percents[0]).toHaveTextContent(`${surveyResult.answers[0].percent}%`)
+    expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
+    expect(answerWrap[0]).toHaveClass('active')
+    expect(answerWrap[1]).not.toHaveClass('active')
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+  })
 })
