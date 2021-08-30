@@ -239,4 +239,18 @@ describe('SurveyResult Component', () => {
     expect(answerWrap[1]).not.toHaveClass('active')
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
   })
+
+  test('should prenvent multiple answer click', async () => {
+    const { saveSurveyResultSpy } = makeSubject()
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    const answerWrap = screen.queryAllByTestId('answer-wrap')
+    fireEvent.click(answerWrap[1])
+    fireEvent.click(answerWrap[1])
+
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    expect(saveSurveyResultSpy.callsCount).toBe(1)
+  })
 })
