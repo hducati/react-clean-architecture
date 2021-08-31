@@ -8,6 +8,7 @@ import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub, Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { Authentication } from '@/domain/usecases'
+import { RecoilRoot } from 'recoil'
 
 type SubjectTypes = {
   authenticationSpy: AuthenticationSpy
@@ -28,14 +29,16 @@ const makeSubject = (params?: SubjectParams): SubjectTypes => {
   const setCurrentAccountMock = jest.fn()
   validationStub.errorMessage = params?.validationError
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-      <Router history={history}>
-        <Login
-          validation={validationStub}
-          authentication={authenticationSpy}
-        />
-      </Router>
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+        <Router history={history}>
+          <Login
+            validation={validationStub}
+            authentication={authenticationSpy}
+          />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
 
   return {

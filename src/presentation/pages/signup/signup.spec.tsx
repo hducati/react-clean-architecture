@@ -8,6 +8,7 @@ import { createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 import { ApiContext } from '@/presentation/contexts'
 import { AddAccount } from '@/domain/usecases'
+import { RecoilRoot } from 'recoil'
 
 type SubjectTypes = {
   addAccountSpy: AddAccountSpy
@@ -26,14 +27,16 @@ const makeSubject = (params?: SubjectParams): SubjectTypes => {
 
   validationStub.errorMessage = params?.validationError
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-      <Router history={history}>
-        <SignUp
-          validation={validationStub}
-          addAccount={addAccountSpy}
-        />
-      </Router>
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+        <Router history={history}>
+          <SignUp
+            validation={validationStub}
+            addAccount={addAccountSpy}
+          />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
 
   return {
