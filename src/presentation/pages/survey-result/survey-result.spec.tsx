@@ -7,6 +7,7 @@ import { createMemoryHistory, MemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 import React from 'react'
 import SurveyResult from './survey-result'
+import { RecoilRoot } from 'recoil'
 
 type SubjectTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
@@ -27,17 +28,19 @@ const makeSubject = ({
   const history = createMemoryHistory({ initialEntries: ['/', '/surveys/any_id'], initialIndex: 1 })
   const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider value={{
-      setCurrentAccount: setCurrentAccountMock,
-      getCurrentAccount: () => mockAccountModel()
-    }}>
-        <Router history={history}>
-          <SurveyResult
-            loadSurveyResult={loadSurveyResultSpy}
-            saveSurveyResult={saveSurveyResultSpy}
-          />
-        </Router>
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={{
+        setCurrentAccount: setCurrentAccountMock,
+        getCurrentAccount: () => mockAccountModel()
+      }}>
+          <Router history={history}>
+            <SurveyResult
+              loadSurveyResult={loadSurveyResultSpy}
+              saveSurveyResult={saveSurveyResultSpy}
+            />
+          </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>
   )
 
   return {
@@ -240,16 +243,15 @@ describe('SurveyResult Component', () => {
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
   })
 
-  test('should prenvent multiple answer click', async () => {
+  test('should prevent multiple answer click', async () => {
     const { saveSurveyResultSpy } = makeSubject()
 
     await waitFor(() => screen.getByTestId('survey-result'))
 
     const answerWrap = screen.queryAllByTestId('answer-wrap')
     fireEvent.click(answerWrap[1])
-    fireEvent.click(answerWrap[1])
-
     await waitFor(() => screen.getByTestId('survey-result'))
+    fireEvent.click(answerWrap[1])
 
     expect(saveSurveyResultSpy.callsCount).toBe(1)
   })
