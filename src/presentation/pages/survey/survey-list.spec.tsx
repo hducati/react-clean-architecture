@@ -6,6 +6,7 @@ import { createMemoryHistory, MemoryHistory } from 'history'
 import { ApiContext } from '@/presentation/contexts'
 import { Router } from 'react-router-dom'
 import { AccountModel } from '@/domain/models'
+import { RecoilRoot } from 'recoil'
 import React from 'react'
 
 type SubjectTypes = {
@@ -18,17 +19,18 @@ const makeSubject = (loadSurveyListSpy = new LoadSurveyListSpy()): SubjectTypes 
   const history = createMemoryHistory({ initialEntries: ['/'] })
   const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider value={{
-      setCurrentAccount: setCurrentAccountMock,
-      getCurrentAccount: () => mockAccountModel()
-    }}>
-      <Router history={history}>
-        <SurveyList
-          loadSurveyList={loadSurveyListSpy}
-        />
-      </Router>
-  </ApiContext.Provider>
-
+    <RecoilRoot>
+      <ApiContext.Provider value={{
+        setCurrentAccount: setCurrentAccountMock,
+        getCurrentAccount: () => mockAccountModel()
+      }}>
+        <Router history={history}>
+          <SurveyList
+            loadSurveyList={loadSurveyListSpy}
+          />
+        </Router>
+    </ApiContext.Provider>
+  </RecoilRoot>
   )
 
   return {
