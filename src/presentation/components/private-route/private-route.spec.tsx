@@ -2,9 +2,10 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory, MemoryHistory } from 'history'
-import { ApiContext } from '@/presentation/contexts'
+import { RecoilRoot } from 'recoil'
 import PrivateRoute from '@/presentation/components/private-route/private-route'
 import { mockAccountModel } from '@/domain/test'
+import { currentAccountState } from '../atoms/atoms'
 
 type SubjectTypes = {
   history: MemoryHistory
@@ -12,13 +13,18 @@ type SubjectTypes = {
 
 const makeSubject = (account = mockAccountModel()): SubjectTypes => {
   const history = createMemoryHistory({ initialEntries: ['/'] })
+  const setCurrentAccountMock = jest.fn()
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: () => account
+  }
 
   render(
-      <ApiContext.Provider value={{ getCurrentAccount: () => account }}>
+      <RecoilRoot initializeState = {(snapshot) => snapshot.set(currentAccountState, mockedState)}>
         <Router history={history}>
           <PrivateRoute />
         </Router>
-      </ApiContext.Provider>
+      </RecoilRoot>
   )
 
   return { history }

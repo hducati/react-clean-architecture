@@ -1,10 +1,10 @@
-import { Header } from '@/presentation/components'
-import { ApiContext } from '@/presentation/contexts'
+import { currentAccountState, Header } from '@/presentation/components'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@/domain/test'
+import { RecoilRoot } from 'recoil'
 import React from 'react'
 
 type SubjectTypes = {
@@ -15,15 +15,16 @@ type SubjectTypes = {
 const makeSubject = (account = mockAccountModel()): SubjectTypes => {
   const history = createMemoryHistory({ initialEntries: ['/'] })
   const setCurrentAccountMock = jest.fn()
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: () => account
+  }
   render(
-    <ApiContext.Provider value={{
-      setCurrentAccount: setCurrentAccountMock,
-      getCurrentAccount: () => account
-    }}>
+    <RecoilRoot initializeState = {(snapshot) => snapshot.set(currentAccountState, mockedState)}>
       <Router history={history}>
         <Header />
       </Router>
-    </ApiContext.Provider>
+    </RecoilRoot>
   )
 
   return {
