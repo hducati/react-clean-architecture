@@ -30,7 +30,6 @@ describe('SurveyResult', () => {
   })
 
   describe('save', () => {
-    const mockAccessDeniedError = (): void => Http.mockForbiddenError(path, 'PUT')
     const mockUnexpectedError = (): void => Http.mockServerError(path, 'PUT')
 
     beforeEach(() => {
@@ -46,12 +45,6 @@ describe('SurveyResult', () => {
 
       cy.get('li:nth-child(2)').click()
       cy.getByTestId('error').should('contain.text', 'Something went wrong. Please try again')
-    })
-
-    it('should logout on AccessDeniedError', () => {
-      mockAccessDeniedError()
-      cy.get('li:nth-child(2)').click()
-      Helper.testUrl('/login')
     })
   })
 })
